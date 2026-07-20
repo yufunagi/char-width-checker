@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="応募フォーム向けの字数チェックツール。文字数・SJISバイト・表示幅をカウントし、全角・半角を可視化・一括変換できます。">
+  <title>字数チェック — 全角・半角文字チェッカー</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600&family=Shippori+Mincho:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="header__text">
+        <h1 class="header__title" data-i18n="header.title">字数チェック</h1>
+        <p class="header__subtitle" data-i18n="header.subtitle">応募フォームの文字数・全角半角を確認</p>
+      </div>
+      <div class="header__actions">
+        <div
+          class="lang-switch"
+          id="langSwitch"
+          role="radiogroup"
+          data-i18n-aria="header.langAria"
+          aria-label="言語"
+        >
+          <button
+            type="button"
+            class="lang-switch__btn lang-switch__btn--active"
+            role="radio"
+            data-lang="ja"
+            aria-checked="true"
+            tabindex="0"
+            data-i18n="header.langJa"
+          >日本語</button>
+          <button
+            type="button"
+            class="lang-switch__btn"
+            role="radio"
+            data-lang="en"
+            aria-checked="false"
+            tabindex="-1"
+            data-i18n="header.langEn"
+          >EN</button>
+        </div>
+        <button type="button" class="header__help" id="helpBtn" data-i18n-aria="header.helpAria" aria-label="使い方">?</button>
+      </div>
+    </header>
+
+    <section class="editor-section" data-i18n-aria="editor.sectionAria" aria-label="原稿入力">
+      <div class="stats-meter" data-i18n-aria="editor.statsAria" aria-label="文字数統計">
+        <div class="stat" data-mode="chars" id="statCharsWrap">
+          <span class="stat__value" id="statChars">0</span>
+          <span class="stat__label" data-i18n="editor.statChars">文字数</span>
+        </div>
+        <span class="stats-meter__sep" aria-hidden="true"></span>
+        <div class="stat" data-mode="sjis" id="statSjisWrap">
+          <span class="stat__value" id="statSjis">0</span>
+          <span class="stat__label" data-i18n="editor.statSjis">SJISバイト</span>
+        </div>
+        <span class="stats-meter__sep" aria-hidden="true"></span>
+        <div class="stat" data-mode="width" id="statWidthWrap">
+          <span class="stat__value" id="statWidth">0</span>
+          <span class="stat__label" data-i18n="editor.statWidth">表示幅</span>
+        </div>
+      </div>
+      <p class="stats-detail" id="statsDetail">全角 0 · 半角 0 · 改行 0 · 空白 0</p>
+
+      <p class="empty-hint" id="emptyHint" data-i18n="editor.emptyHint">色分けで全角・半角を確認し、上限や一括変換も使えます。折り返しは画面上の見え方のみで、コピーされる文字には改行は入りません。</p>
+
+      <label class="editor-label" for="editor" data-i18n="editor.label">原稿エリア</label>
+      <div class="editor-wrap">
+        <div class="editor-preview" id="editorPreview" aria-hidden="true"></div>
+        <textarea
+          id="editor"
+          class="editor"
+          data-i18n-placeholder="editor.placeholder"
+          placeholder="ここに文章を入力または貼り付け…"
+          spellcheck="false"
+        ></textarea>
+      </div>
+      <div class="legend" data-i18n-aria="editor.legendAria" aria-label="凡例">
+        <span class="legend__item"><span class="legend__swatch legend__swatch--fw"></span><span data-i18n="editor.legendFw">全角</span></span>
+        <span class="legend__item"><span class="legend__swatch legend__swatch--hw"></span><span data-i18n="editor.legendHw">半角</span></span>
+        <span class="legend__item"><span class="legend__swatch legend__swatch--warn"></span><span data-i18n="editor.legendWarn">問題文字</span></span>
+      </div>
+    </section>
+
+    <section class="limit-section" data-i18n-aria="limit.sectionAria" aria-label="文字数上限">
+      <div class="limit-primary">
+        <label class="limit-label" for="limitInput" data-i18n="limit.label">上限</label>
+        <div class="limit-presets" role="group" data-i18n-aria="limit.presetsAria" aria-label="上限プリセット">
+          <button type="button" class="preset-btn" data-limit="200">200</button>
+          <button type="button" class="preset-btn" data-limit="400">400</button>
+          <button type="button" class="preset-btn" data-limit="800">800</button>
+          <button type="button" class="preset-btn" data-limit="1000">1000</button>
+          <button type="button" class="preset-btn preset-btn--none" data-limit="" data-i18n="limit.none">なし</button>
+        </div>
+        <input type="number" id="limitInput" class="limit-input" min="0" data-i18n-placeholder="limit.none" placeholder="なし" data-i18n-aria="limit.inputAria" aria-label="文字数上限">
+      </div>
+      <div class="limit-secondary">
+        <label class="checkbox-label">
+          <input type="checkbox" id="excludeWhitespace">
+          <span data-i18n="limit.excludeWs">空白・改行を除く</span>
+        </label>
+        <label class="select-label">
+          <span data-i18n="limit.modeLabel">基準</span>
+          <select id="limitMode" data-i18n-aria="limit.modeAria" aria-label="上限のカウント方式">
+            <option value="chars" data-i18n="limit.modeChars">文字数</option>
+            <option value="sjis" data-i18n="limit.modeSjis">SJISバイト</option>
+            <option value="width" data-i18n="limit.modeWidth">表示幅</option>
+          </select>
+        </label>
+      </div>
+      <div class="progress-wrap" id="progressWrap" hidden>
+        <div class="progress-bar" role="progressbar" aria-valuemin="0">
+          <div class="progress-bar__fill" id="progressFill"></div>
+        </div>
+        <span class="progress-text" id="progressText">0 / 400</span>
+      </div>
+    </section>
+
+    <div class="problem-panel" id="problemPanel" hidden>
+      <p class="problem-panel__title" data-i18n="problem.title">問題文字（クリックで該当位置へ）</p>
+      <ul class="problem-panel__list" id="problemList"></ul>
+    </div>
+
+    <section class="actions" data-i18n-aria="actions.sectionAria" aria-label="操作">
+      <div class="actions__primary">
+        <button type="button" class="btn btn--primary" id="btnFullWidth" data-i18n="actions.fullWidth">全角に統一</button>
+        <button type="button" class="btn btn--secondary" id="btnHalfWidth" data-i18n="actions.halfWidth">半角に統一</button>
+      </div>
+      <div class="actions__secondary">
+        <button type="button" class="link-btn" id="btnCopy" data-i18n="actions.copy">コピー</button>
+        <span class="actions__sep" aria-hidden="true">·</span>
+        <button type="button" class="link-btn" id="btnClear" data-i18n="actions.clear">クリア</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p data-i18n="footer.privacy">入力はブラウザ内のみで処理され、サーバーには送信されません。設定・原稿は端末の localStorage に保存されます。</p>
+    </footer>
+  </div>
+
+  <dialog class="help-dialog" id="helpDialog">
+    <div class="help-dialog__content">
+      <h2 data-i18n="help.title">使い方</h2>
+      <p class="help-dialog__intro" data-i18n="help.intro">応募フォームでは全角のみ・半角のみなど、文字種の指定があることがあります。このツールで可視化・変換できます。</p>
+      <ul>
+        <li data-i18n="help.li1" data-i18n-html><strong>文字数</strong> — 1文字 = 1 としてカウント</li>
+        <li data-i18n="help.li2" data-i18n-html><strong>SJISバイト</strong> — Shift_JIS 換算のバイト数（全角2・半角1が多い）</li>
+        <li data-i18n="help.li3" data-i18n-html><strong>表示幅</strong> — 全角 = 2、半角 = 1 で換算</li>
+        <li data-i18n="help.li4">色分けで全角・半角・問題文字（絵文字など）を確認できます</li>
+        <li data-i18n="help.li5">折り返しは日本語の禁則に沿った画面上の見え方のみです。コピーされる文字には改行は入りません</li>
+        <li data-i18n="help.li6">「全角に統一」「半角に統一」で一括変換。Ctrl+Z で元に戻せます</li>
+      </ul>
+      <button type="button" class="btn btn--primary" id="helpClose" data-i18n="help.close">閉じる</button>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/encoding-japanese@2.2.0/encoding.min.js"
+    integrity="sha384-ANppuyw2wBbL6v3QqaS8P0nihBJskUMlGZma7m3a5kxKuHPITb3rF4D5e+vfXSU0"
+    crossorigin="anonymous"
+  ></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
