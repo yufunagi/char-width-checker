@@ -62,10 +62,12 @@ const DICTS = {
     'help.title': '使い方',
     'help.intro':
       '応募フォームでは全角のみ・半角のみなど、文字種の指定があることがあります。このツールで可視化・変換できます。',
-    'help.li1': '<strong>文字数</strong> — 1文字 = 1 としてカウント',
-    'help.li2':
-      '<strong>SJISバイト</strong> — Shift_JIS 換算のバイト数（全角2・半角1が多い）',
-    'help.li3': '<strong>表示幅</strong> — 全角 = 2、半角 = 1 で換算',
+    'help.li1Term': '文字数',
+    'help.li1Desc': '— 1文字 = 1 としてカウント',
+    'help.li2Term': 'SJISバイト',
+    'help.li2Desc': '— Shift_JIS 換算のバイト数（全角2・半角1が多い）',
+    'help.li3Term': '表示幅',
+    'help.li3Desc': '— 全角 = 2、半角 = 1 で換算',
     'help.li4': '色分けで全角・半角・問題文字（絵文字など）を確認できます',
     'help.li5':
       '折り返しは日本語の禁則に沿った画面上の見え方のみです。コピーされる文字には改行は入りません',
@@ -141,11 +143,13 @@ const DICTS = {
     'help.title': 'How to use',
     'help.intro':
       'Japanese forms may require fullwidth-only (全角) or halfwidth-only (半角) text. This tool visualizes and converts them.',
-    'help.li1': '<strong>Characters</strong> — count 1 per character',
-    'help.li2':
-      '<strong>SJIS bytes</strong> — Shift_JIS byte length (often 2 for fullwidth, 1 for halfwidth)',
-    'help.li3':
-      '<strong>Display width</strong> — fullwidth = 2, halfwidth = 1',
+    'help.li1Term': 'Characters',
+    'help.li1Desc': '— count 1 per character',
+    'help.li2Term': 'SJIS bytes',
+    'help.li2Desc':
+      '— Shift_JIS byte length (often 2 for fullwidth, 1 for halfwidth)',
+    'help.li3Term': 'Display width',
+    'help.li3Desc': '— fullwidth = 2, halfwidth = 1',
     'help.li4':
       'Highlights show fullwidth, halfwidth, and problem characters (emoji, etc.)',
     'help.li5':
@@ -221,12 +225,7 @@ export function applyLocale(lang) {
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     const key = el.getAttribute('data-i18n');
     if (!key) return;
-    const html = el.hasAttribute('data-i18n-html');
-    if (html) {
-      el.innerHTML = t(key);
-    } else {
-      el.textContent = t(key);
-    }
+    el.textContent = t(key);
   });
 
   document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
