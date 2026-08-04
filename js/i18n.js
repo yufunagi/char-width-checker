@@ -9,6 +9,8 @@ const DICTS = {
 
     'header.title': '字数チェック',
     'header.subtitle': '応募フォームの文字数・全角半角を確認',
+    'intro.summary':
+      '字数チェックは、応募フォーム向けに文字数・SJISバイト・表示幅をカウントし、全角・半角を可視化・一括変換できる無料のブラウザツールです。学生・イベント参加者などフォーム提出前の確認に使え、入力はサーバーに送られずブラウザ内のみで処理されます。',
     'header.helpAria': '使い方',
     'header.langAria': '言語',
     'header.langJa': '日本語',
@@ -89,6 +91,8 @@ const DICTS = {
 
     'header.title': 'Character Width',
     'header.subtitle': 'Spot fullwidth vs halfwidth — a quirk of Japanese forms',
+    'intro.summary':
+      'Character Width is a free browser tool for Japanese application forms: count characters, SJIS bytes, and display width, and visualize or convert fullwidth and halfwidth text. Useful before submitting student or event forms — your input stays in the browser and is never sent to a server.',
     'header.helpAria': 'How to use',
     'header.langAria': 'Language',
     'header.langJa': '日本語',
