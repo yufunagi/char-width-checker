@@ -5,7 +5,7 @@ const DICTS = {
   ja: {
     'meta.title': '字数チェック — 全角・半角文字チェッカー',
     'meta.description':
-      '応募フォーム向けの字数チェックツール。文字数・SJISバイト・表示幅をカウントし、全角・半角を可視化・一括変換できます。',
+      '応募フォーム向けの字数チェックツール。文字数・SJISバイト・表示幅をカウントし、全角・半角を可視化・一括変換できます。入力はブラウザ内のみで処理され、サーバーには送信されません。',
 
     'header.title': '字数チェック',
     'header.subtitle': '応募フォームの文字数・全角半角を確認',
@@ -85,7 +85,7 @@ const DICTS = {
   en: {
     'meta.title': 'Character Width — Fullwidth / Halfwidth Checker',
     'meta.description':
-      'Check character counts for Japanese application forms. Count characters, SJIS bytes, and display width — and visualize or convert fullwidth (全角) and halfwidth (半角) text.',
+      'Check character counts for Japanese application forms. Count characters, SJIS bytes, and display width — and visualize or convert fullwidth (全角) and halfwidth (半角) text. Processing stays in your browser; nothing is sent to a server.',
 
     'header.title': 'Character Width',
     'header.subtitle': 'Spot fullwidth vs halfwidth — a quirk of Japanese forms',
@@ -219,8 +219,23 @@ export function applyLocale(lang) {
   document.documentElement.lang = currentLocale;
   document.title = t('meta.title');
 
+  const description = t('meta.description');
+  const title = t('meta.title');
+
   const meta = document.querySelector('meta[name="description"]');
-  if (meta) meta.setAttribute('content', t('meta.description'));
+  if (meta) meta.setAttribute('content', description);
+
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle) ogTitle.setAttribute('content', title);
+  const ogDesc = document.querySelector('meta[property="og:description"]');
+  if (ogDesc) ogDesc.setAttribute('content', description);
+  const ogLocale = document.querySelector('meta[property="og:locale"]');
+  if (ogLocale) ogLocale.setAttribute('content', currentLocale === 'en' ? 'en_US' : 'ja_JP');
+
+  const twTitle = document.querySelector('meta[name="twitter:title"]');
+  if (twTitle) twTitle.setAttribute('content', title);
+  const twDesc = document.querySelector('meta[name="twitter:description"]');
+  if (twDesc) twDesc.setAttribute('content', description);
 
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     const key = el.getAttribute('data-i18n');
