@@ -1,0 +1,38 @@
+# 字数チェック — 全角・半角文字チェッカー
+
+> 応募フォーム向けの字数チェックツール。文字数・SJISバイト・表示幅をカウントし、全角・半角を可視化・一括変換できます。
+
+URL: https://yufunagi.github.io/char-width-checker/
+
+## Summary
+
+Character Width Checker is a free, browser-only web tool for Japanese application forms (entry sheets, event forms, etc.). It counts characters three ways, highlights fullwidth (全角) vs halfwidth (半角) text, detects problematic characters, and converts text in bulk.
+
+## Features
+
+- Character count / Shift_JIS byte length / display width (fullwidth=2, halfwidth=1)
+- Color highlights for fullwidth, halfwidth, and problem characters (emoji, non-SJIS, etc.)
+- Bulk convert to fullwidth or halfwidth
+- Optional character limit with presets (200 / 400 / 800 / 1000) and progress bar
+- Option to exclude whitespace and newlines from the count
+- Japanese / English UI toggle (same URL; no separate language pages)
+- Settings and draft text saved in localStorage on the device
+
+## How to use
+
+1. Open https://yufunagi.github.io/char-width-checker/
+2. Paste or type text into the draft area
+3. Read counts from the live stats meter
+4. Use limit presets or custom limit if needed
+5. Convert with “全角に統一 / Make fullwidth” or “半角に統一 / Make halfwidth”
+6. Copy the result to the clipboard
+
+## Privacy
+
+- Input text is processed only inside the browser and is not sent to an application server
+- Limit, draft, and language preference are stored in localStorage on the device
+- The page may load Google Fonts and encoding-japanese from jsDelivr for display and SJIS calculation (draft body text is not uploaded by this app)
+
+## License
+
+MIT

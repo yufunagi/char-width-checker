@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yufunagi.github.io/char-width-checker/sitemap.xml

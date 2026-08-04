@@ -45,9 +45,9 @@ npx serve .
 
 1. このリポジトリを GitHub に push
 2. リポジトリの **Settings → Pages → Build and deployment → Source** で **GitHub Actions** を選択
-3. `main` ブランチへ push すると `.github/workflows/deploy.yml` が自動デプロイ（`index.html` / `css/` / `js/` のみ公開）
+3. `main` ブランチへ push すると `.github/workflows/deploy.yml` が自動デプロイ（`index.html` / `css/` / `js/` / `assets/` に加え `robots.txt`・`sitemap.xml`・`llms.txt` も公開）
 
-初回デプロイ後、`https://<username>.github.io/<repo-name>/` で公開されます。
+本番 URL: https://yufunagi.github.io/char-width-checker/
 
 ## 技術構成
 
